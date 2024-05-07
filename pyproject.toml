@@ -1,0 +1,72 @@
+[tool.poetry]
+name = "bookstore"
+version = "0.1.0"
+description = "Salve e gerencie sua livraria"
+authors = ["Adão Santos <adaosantosn@outlook.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.4"
+djangorestframework = "^3.15.1"
+psycopg2-binary = "^2.9.9"
+gunicorn = "^22.0.0"
+python-dotenv = "^1.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+black = "^24.4.2"
+pytest = "^8.2.0"
+pytest-django = "^4.8.0"
+faker = "^25.0.1"
+model-bakery = "^1.18.0"
+coverage = "^7.5.0"
+
+
+[tool.poetry.group.doc.dependencies]
+drf-yasg = {extras = ["validation"], version = "^1.21.7"}
+
+
+[tool.flake8]
+max-line-length = 120
+exclude = [
+    ".git",
+    "__pycache__",
+    "*venv",
+    "build",
+]
+extend-ignore = ["E203"]
+
+
+[tool.black]
+line-length = 88
+
+
+[tool.coverage.run]
+omit = ['*/init.py',
+        '*/settings.py',
+        '*/manager.py',
+        '*/wsgi.py',
+        '*/test*.py',
+        '*/asgi.py',
+        '*/apps.py',
+        '*/urls.py',
+        '*/migrations/*',
+        '*/tests/*'
+]
+
+
+[tool.coverage.paths]
+source = ['.']
+
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "bookStore.settings"
+addopts = "-p no:warnings"
+python_files = ["test_*.py", "*_test.py", "tests/"]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

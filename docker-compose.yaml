@@ -1,0 +1,37 @@
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: poetry run gunicorn bookStore.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+    expose:
+      - 8000
+    env_file:
+      - .env
+    depends_on:
+    - db
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=bookstore
+      - POSTGRES_PASSWORD=bookstore
+      - POSTGRES_DB=bookstore
+  nginx:
+    build: build/nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+      - media_volume:/home/app/web/mediafiles
+    ports:
+      - 80:80
+      - 8080:80
+    depends_on:
+      - web
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
