@@ -11,7 +11,7 @@ from authors.models import Author
 from genres.models import Genre
 from languages.models import Language
 from publishers.models import Publisher
-
+from datetime import datetime
 from ..models import Book
 
 
@@ -77,12 +77,30 @@ def data_json_book_create(
         "authors": [generate_author.id],
     }
 
-
 @pytest.fixture
 def data_json_book_put(data_json_book_create):
     data_put = data_json_book_create.copy()
     data_put.update(
         {"pages": 400, "description": "Updated with put", "publication_year": 1966}
+    )
+
+    return data_put
+
+@pytest.fixture
+def data_json_book_create_invalid_year_less_than_1900(data_json_book_create):
+    data_put = data_json_book_create.copy()
+    data_put.update(
+        {"publication_year": 1895}
+    )
+
+    return data_put
+
+@pytest.fixture
+def data_json_book_create_invalid_year_greater_than_current_year(data_json_book_create):
+    data_put = data_json_book_create.copy()
+    now_year = datetime.now().year
+    data_put.update(
+        {"publication_year": now_year + 1}
     )
 
     return data_put
@@ -96,6 +114,20 @@ class TestBookCreateListView:
         )
 
         assert response.status_code == 201
+
+    def test_book_create_invalid_year_lt(self, logged_client: APIClient, data_json_book_create_invalid_year_less_than_1900: dict):
+        response = logged_client.post(
+            reverse_lazy("books-create-list"), data=data_json_book_create_invalid_year_less_than_1900
+        )
+
+        assert response.status_code == 400
+    
+    def test_book_create_invalid_year_gt(self, logged_client: APIClient, data_json_book_create_invalid_year_greater_than_current_year: dict):
+        response = logged_client.post(
+            reverse_lazy("books-create-list"), data=data_json_book_create_invalid_year_greater_than_current_year
+        )
+
+        assert response.status_code == 400
 
     def test_list_book(self, logged_client: APIClient, generate_list_books: List[Book]):
         response = logged_client.get(reverse_lazy("books-create-list"))
