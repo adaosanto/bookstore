@@ -55,7 +55,10 @@ omit = ['*/init.py',
         '*/migrations/*',
         '*/tests/*'
 ]
-
+[tool.coverage.report]
+exclude_also = [
+    'from .dev import * ',
+]
 
 [tool.coverage.paths]
 source = ['.']
