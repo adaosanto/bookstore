@@ -128,4 +128,15 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
 }
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Basic': {
+            'type': 'basic'
+      },
+      'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   }
+}
