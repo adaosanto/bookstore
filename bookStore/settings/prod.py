@@ -18,3 +18,4 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT"),
     }
 }
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS[:-1]
