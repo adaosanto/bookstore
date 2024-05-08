@@ -25,11 +25,10 @@ from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Snippets API",
+        title="BookStore API",
         default_version="v1",
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
+        description="Manager your books",
+        contact=openapi.Contact(email="adaosantosn@outlook.com"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
