@@ -8,6 +8,6 @@ def book(db):
     return baker.make(Book, title="test")
 
 
-class TesteBookModel:
+class TestBookModel:
     def test_str_method(self, book: Book):
         assert str(book) == "Test"
