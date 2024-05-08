@@ -62,8 +62,8 @@ source = ['.']
 
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "bookStore.settings"
-addopts = "-p no:warnings"
+DJANGO_SETTINGS_MODULE = "bookStore.settings.dev"
+addopts = "--reuse-db -p no:warnings"
 python_files = ["test_*.py", "*_test.py", "tests/"]
 
 
