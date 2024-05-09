@@ -2,4 +2,7 @@ from django.contrib import admin
 
 from .models import Language
 
-admin.site.register(Language)
+class LanguageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+admin.site.register(Language, LanguageAdmin)
