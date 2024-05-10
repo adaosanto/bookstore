@@ -17,6 +17,11 @@ python-gnupg = "^0.5.2"
 requests = "^2.31.0"
 django-storages = "^1.14.3"
 dropbox = "^11.36.2"
+celery = "^5.4.0"
+flower = "^2.0.1"
+redis = "^5.0.4"
+django-celery-beat = "^2.6.0"
+pytz = "^2024.1"
 
 
 [tool.poetry.group.dev.dependencies]
