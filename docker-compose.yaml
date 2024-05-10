@@ -31,6 +31,34 @@ services:
       - 8080:80
     depends_on:
       - web
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+        - ~/.docker-conf/redis/data/:/var/lib/redis/
+        - ~/.docker-conf/redis/log/:/var/log/redis
+  celery_worker:
+    container_name: celery_worker
+    build: .
+    command: poetry run celery -A bookStore worker --pool=solo --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - web
+  flower:
+    container_name: flower
+    build: .
+    command: poetry run celery -A bookStore flower --port=5555
+    ports:
+      - 5556:5555
+    depends_on:
+      - web
+      - redis
+      - celery_worker
+      
 volumes:
   postgres_data:
   static_volume:
