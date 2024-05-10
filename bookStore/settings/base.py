@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     "publishers",
     "drf_yasg",
     "dbbackup",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -154,3 +158,7 @@ DBBACKUP_STORAGE_OPTIONS = {
     'oauth2_access_token': None
 }
 DBBACKUP_GPG_RECIPIENT = os.environ.get('DBBACKUP_GPG_RECIPIENT')
+
+CELERY_ENABLED = os.environ.get('CELERY_ENABLED')
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
