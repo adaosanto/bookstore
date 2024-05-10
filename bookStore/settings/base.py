@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "languages",
     "publishers",
     "drf_yasg",
+    "dbbackup",
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,16 @@ SWAGGER_SETTINGS = {
       }
    }
 }
+
+# DropBox Storage Conf
+DROPBOX_CLIENT_ID_APP_KEY = os.environ.get('DROPBOX_CLIENT_ID_APP_KEY')
+DROPBOX_CLIENT_SECRET_APP_SECRET = os.environ.get('DROPBOX_CLIENT_SECRET_APP_SECRET')
+DROPBOX_CODE_AUTHORIZATION = os.environ.get('DROPBOX_CODE_AUTHORIZATION')
+DROPBOX_API_REFRESH_TOKEN = os.environ.get('DROPBOX_API_REFRESH_TOKEN')
+DROPBOX_API_URL = os.environ.get('DROPBOX_API_URL')
+
+DBBACKUP_STORAGE = 'storages.backends.dropbox.DropboxStorage'
+DBBACKUP_STORAGE_OPTIONS = {
+    'oauth2_access_token': None
+}
+DBBACKUP_GPG_RECIPIENT = os.environ.get('DBBACKUP_GPG_RECIPIENT')
