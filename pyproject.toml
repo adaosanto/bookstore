@@ -12,6 +12,11 @@ djangorestframework = "^3.15.1"
 psycopg2-binary = "^2.9.9"
 gunicorn = "^22.0.0"
 python-dotenv = "^1.0.1"
+django-dbbackup = "^4.1.0"
+python-gnupg = "^0.5.2"
+requests = "^2.31.0"
+django-storages = "^1.14.3"
+dropbox = "^11.36.2"
 
 
 [tool.poetry.group.dev.dependencies]
