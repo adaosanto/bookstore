@@ -1,31 +1,7 @@
-###########
-# BUILDER #
-###########
-
-# pull official base image
-FROM python:3.11.4-slim-buster as builder
-
-# set work directory
-WORKDIR /app
-
-# set environment variables
-ENV POETRY_VIRTUALENVS_CREATE=false
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
-
-COPY . /app/
-
-
-# pull official base image
 FROM python:3.11.4-slim-buster
 
 # create directory for the app user
 RUN mkdir -p /home/app
-
 
 # create the app user
 RUN addgroup --system app && adduser --system --group app
@@ -41,7 +17,8 @@ RUN mkdir $APP_HOME/mediafiles
 WORKDIR $APP_HOME
 COPY . $APP_HOME
 
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN apt-get update && apt-get install -y --no-install-recommends netcat && \
+    apt-get install -y gnupg
 RUN pip install poetry
 RUN poetry config installer.max-workers 10
 RUN poetry install --no-interaction --no-ansi
