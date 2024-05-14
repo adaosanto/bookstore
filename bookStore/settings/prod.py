@@ -1,9 +1,7 @@
 from .base import *
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
@@ -18,4 +16,4 @@ DATABASES = {
         "PORT": os.environ.get("SQL_PORT"),
     }
 }
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS[:-1]
+CSRF_TRUSTED_ORIGINS = [f'http://{host}' if not host.startswith('http') else host for host in ALLOWED_HOSTS]

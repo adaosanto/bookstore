@@ -1,31 +1,18 @@
-###########
-# BUILDER #
-###########
+FROM ubuntu/postgres
 
-# pull official base image
-FROM python:3.11.4-slim-buster as builder
+RUN apt update && apt upgrade -y && \
+    apt install curl -y && \
+    apt install python3 -y && \
+    apt-get install software-properties-common -y && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt install python3.11 -y && \
+    apt-get install -y --no-install-recommends netcat 
 
-# set work directory
-WORKDIR /app
-
-# set environment variables
-ENV POETRY_VIRTUALENVS_CREATE=false
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
-
-COPY . /app/
-
-
-# pull official base image
-FROM python:3.11.4-slim-buster
+RUN curl -sS -O https://bootstrap.pypa.io/get-pip.py | python3.11
+RUN python3.11 get-pip.py
 
 # create directory for the app user
 RUN mkdir -p /home/app
-
 
 # create the app user
 RUN addgroup --system app && adduser --system --group app
@@ -33,26 +20,25 @@ RUN addgroup --system app && adduser --system --group app
 # create the appropriate directories
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
+ENV GNUPG_HOME $HOME/.gnupg
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
 RUN mkdir $APP_HOME/mediafiles
+RUN mkdir $GNUPG_HOME 
 
 
 WORKDIR $APP_HOME
 COPY . $APP_HOME
 
-RUN apt-get update && apt-get install -y --no-install-recommends netcat
-RUN pip install poetry
+RUN python3.11 -m pip install poetry
 RUN poetry config installer.max-workers 10
 RUN poetry install --no-interaction --no-ansi
 RUN chown -R app:app $HOME
 
 RUN sed -i 's/\r$//g'  $APP_HOME/build/entrypoint.sh
 RUN chmod +x  $APP_HOME/build/entrypoint.sh
+RUN poetry run python3.11 manage.py genkey --gnupghome=$GNUPG_HOME
 
-
-# change to the app user
 USER app
 
-# run entrypoint.sh
 ENTRYPOINT ["/home/app/web/build/entrypoint.sh"]

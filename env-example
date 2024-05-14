@@ -8,9 +8,20 @@ SQL_USER=bookstore
 SQL_PASSWORD=bookstore
 SQL_HOST=db
 SQL_PORT=5432
-DATABASE=postgres
 
+# Informações para configurar o DropBox como um Storage
+DROPBOX_CLIENT_ID_APP_KEY=
+DROPBOX_CLIENT_SECRET_APP_SECRET=
+DROPBOX_CODE_AUTHORIZATION=
+DROPBOX_API_REFRESH_TOKEN=
+DROPBOX_API_URL=https://api.dropbox.com/oauth2/token
 
-POSTGRES_USER=$SQL_USER
-POSTGRES_PASSWORD=$SQL_DATABASE
-POSTGRES_DB=$SQL_PASSWORD
+# Informações para geração da secrets key, usada para criptografar backups
+GEN_KEY_ENCRYPT_BACKUP_EMAIL=me@me.com
+GEN_KEY_ENCRYPT_BACKUP_NAME=bookstore
+GEN_KEY_ENCRYPT_BACKUP_PASSWORD=Decrypt@1 # encrypt && decrypt backup
+
+# Celery conf
+CELERY_ENABLED = 1
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"

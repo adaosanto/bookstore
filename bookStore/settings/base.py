@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+from libs.dropbox.get_token import get_token_by_refresh_token
+load_dotenv(override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -37,7 +40,10 @@ INSTALLED_APPS = [
     "genres",
     "languages",
     "publishers",
+    "utils",
     "drf_yasg",
+    "dbbackup",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -98,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "America/Cuiaba"
 
 USE_I18N = True
 
@@ -140,3 +146,20 @@ SWAGGER_SETTINGS = {
       }
    }
 }
+
+# DropBox Storage Conf
+DROPBOX_CLIENT_ID_APP_KEY = os.environ.get('DROPBOX_CLIENT_ID_APP_KEY')
+DROPBOX_CLIENT_SECRET_APP_SECRET = os.environ.get('DROPBOX_CLIENT_SECRET_APP_SECRET')
+DROPBOX_CODE_AUTHORIZATION = os.environ.get('DROPBOX_CODE_AUTHORIZATION')
+DROPBOX_API_REFRESH_TOKEN = os.environ.get('DROPBOX_API_REFRESH_TOKEN')
+DROPBOX_API_URL = os.environ.get('DROPBOX_API_URL')
+
+DBBACKUP_STORAGE = 'storages.backends.dropbox.DropboxStorage'
+DBBACKUP_STORAGE_OPTIONS = {
+    'oauth2_access_token': get_token_by_refresh_token()
+}
+DBBACKUP_GPG_RECIPIENT = os.environ.get('DBBACKUP_GPG_RECIPIENT')
+
+CELERY_ENABLED = bool(int(os.environ.get('CELERY_ENABLED', default=1)))
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')

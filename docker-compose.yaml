@@ -1,37 +1,89 @@
 services:
   web:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
-    command: poetry run gunicorn bookStore.wsgi:application --bind 0.0.0.0:8000
+    command: 'poetry run gunicorn bookStore.wsgi:application --bind 0.0.0.0:8000'
     volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
+      - 'static_volume:/home/app/web/staticfiles'
+      - 'media_volume:/home/app/web/mediafiles'
     expose:
       - 8000
     env_file:
       - .env
     depends_on:
-    - db
+      - db
+    restart: on-failure
   db:
-    image: postgres:15
+    image: 'postgres:14.12-alpine3.19'
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - 'postgres_data:/var/lib/postgresql/data/'
     environment:
       - POSTGRES_USER=bookstore
       - POSTGRES_PASSWORD=bookstore
       - POSTGRES_DB=bookstore
+    restart: on-failure
   nginx:
     build: build/nginx
     volumes:
-      - static_volume:/home/app/web/staticfiles
-      - media_volume:/home/app/web/mediafiles
+      - 'static_volume:/home/app/web/staticfiles'
+      - 'media_volume:/home/app/web/mediafiles'
     ports:
-      - 80:80
-      - 8080:80
+      - '80:80'
+      - '8080:80'
     depends_on:
       - web
+    restart: on-failure
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - '~/.docker-conf/redis/data/:/var/lib/redis/'
+      - '~/.docker-conf/redis/log/:/var/log/redis'
+    restart: on-failure
+  celery_worker:
+    container_name: celery_worker
+    build: .
+    command: poetry run celery -A bookStore worker -l INFO --concurrency 1 -E
+    volumes:
+      - '.:/app'
+    depends_on:
+      - redis
+      - web
+    env_file:
+      - .env
+    restart: on-failure
+  celery_beat_django:
+    container_name: celery_beat_django
+    build: .
+    command: >-
+      poetry run celery -A bookStore beat -l info --scheduler
+      django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - '.:/app'
+    depends_on:
+      - redis
+      - web
+      - celery_worker
+    env_file:
+      - .env
+    restart: on-failure
+  flower:
+    container_name: flower
+    build: .
+    command: poetry run celery -A bookStore flower --port=5555
+    ports:
+      - '5556:5555'
+    depends_on:
+      - web
+      - redis
+      - celery_worker
+    env_file:
+      - .env
+    restart: on-failure
 volumes:
-  postgres_data:
-  static_volume:
-  media_volume:
+  postgres_data: 
+  static_volume: 
+  media_volume: 
