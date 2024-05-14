@@ -29,14 +29,16 @@ Instale as dependências
 Execute as migrações
 
 ```bash
-  poetry run python3 manage.py migrate
+  poetry run ./manage.py migrate
 ```
 
 Inicie o servidor do django
 
 ```bash
-  poetry run python3 manage.py runserver
+  poetry run ./manage.py runserver
 ```
+
+##### Etapas Opcionais 
 
 Inicie o processo do Celery e Celery Beat Django
 
@@ -60,31 +62,39 @@ Para fazer o deploy desse projeto com o docker compose rode
   docker compose up -d --build
 ```
 
-Após a cricação e execução dos containers, no container *web*, deverá ser executado os seguintes comandos:
+Após a criação e execução dos containers, no container __web__, deverá ser executado os seguintes comandos:
 
 * Cria migrações do banco de dados
     ```bash
-    poetry run python3 manager.py migrate --no-input
+    poetry run ./manage.py migrate --no-input
     ```
 * Faz coleção dos arquivos estáticos, útil para o swagger e redoc
     ```bash
-    poetry run python3 manager.py collectstatic --no-input
+    poetry run ./manage.py collectstatic --no-input
     ```
+* Crie um usuário do tipo __superuser__
+    ```bash
+    poetry run ./manage.py createsuperuser
+    ```
+    
 ## Variáveis de Ambiente
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-`SECRET_KEY` `DEBUG` `DJANGO_ALLOWED_HOSTS` `SQL_ENGINE` `SQL_DATABASE` `SQL_PASSWORD` `SQL_HOST` 
-`DATABASE` `DROPBOX_CLIENT_ID_APP_KEY` `DROPBOX_CLIENT_SECRET_APP_SECRET` `DROPBOX_CODE_AUTHORIZATION`
-`DROPBOX_API_REFRESH_TOKEN` `DROPBOX_API_URL` `DBBACKUP_GPG_RECIPIENT` `CELERY_ENABLED` `CELERY_BROKER_URL` `CELERY_RESULT_BACKEND`
+`SECRET_KEY` `DEBUG` `DJANGO_ALLOWED_HOSTS` `SQL_ENGINE` `SQL_DATABASE` `SQL_PASSWORD` `SQL_HOST`  `DROPBOX_CLIENT_ID_APP_KEY` `DROPBOX_CLIENT_SECRET_APP_SECRET` `DROPBOX_CODE_AUTHORIZATION` `DROPBOX_API_REFRESH_TOKEN` `DROPBOX_API_URL` `DBBACKUP_GPG_RECIPIENT` `CELERY_ENABLED` `CELERY_BROKER_URL` `CELERY_RESULT_BACKEND`
 
 ## Funcionalidades
 
 - Interface Swagger
 - Interface Redoc
+- Painel Administrativo
 
+## FAQ
+
+#### Como obter as credenciais do Dropbox?
+
+Confira na [documentação](https://django-storages.readthedocs.io/en/latest/backends/dropbox.html) do Storage
 
 ## Autores
 
 - [@adaosantos](https://www.github.com/adaosanto)
-
