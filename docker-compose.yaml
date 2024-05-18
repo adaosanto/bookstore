@@ -43,6 +43,8 @@ services:
       - '~/.docker-conf/redis/data/:/var/lib/redis/'
       - '~/.docker-conf/redis/log/:/var/log/redis'
     restart: on-failure
+    profiles:
+      - backup_services
   celery_worker:
     container_name: celery_worker
     build: .
@@ -55,6 +57,8 @@ services:
     env_file:
       - .env
     restart: on-failure
+    profiles:
+      - backup_services
   celery_beat_django:
     container_name: celery_beat_django
     build: .
@@ -70,6 +74,8 @@ services:
     env_file:
       - .env
     restart: on-failure
+    profiles:
+      - backup_services
   flower:
     container_name: flower
     build: .
@@ -83,6 +89,8 @@ services:
     env_file:
       - .env
     restart: on-failure
+    profiles:
+      - backup_services
 volumes:
   postgres_data: 
   static_volume: 
