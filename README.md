@@ -76,7 +76,9 @@ Após a criação e execução dos containers, no container __web__, deverá ser
     ```bash
     poetry run ./manage.py createsuperuser
     ```
-    
+> **Observação**
+> Os containers de backup não serão iniciados por padrão ao executar __docker compose up__, pois a execução de backups automáticos é opcional. Você pode executar backups manualmente rodando o comando __poetry run ./manage.py  dbbackup --encrypt__ no container __web__. Se desejar iniciar os containers para executar backups automáticos, use o comando __docker compose --profile backup_services up -d__. Lembrando que os intervalos ou cronjobs para a execução dos backups devem ser configurados no painel admin.
+
 ## Variáveis de Ambiente
 
 Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
@@ -94,6 +96,11 @@ Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de
 #### Como obter as credenciais do Dropbox?
 
 Confira na [documentação](https://django-storages.readthedocs.io/en/latest/backends/dropbox.html) do Storage
+
+#### Como restaurar backups?
+Execute o comando __poetry run ./manage.py dbrestore --decrypt__ no container web
+
+Mais detalhes na [documentação](https://django-dbbackup.readthedocs.io/en/stable/configuration.html#pgp) do dbbackup
 
 ## Autores
 
