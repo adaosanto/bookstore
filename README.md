@@ -1,7 +1,10 @@
 
 # BookStore
-
-![test-flag](https://github.com/adaosanto/bookstore/workflows/Pipeline/badge.svg)
+<p align="center">
+<a href="https://github.com/adaosanto/bookstore/actions" target="_blank">
+    <img src="https://github.com/adaosanto/bookstore/workflows/Pipeline/badge.svg" alt="Test">
+</a>
+</p>
 
 A API da BookStore é uma interface robusta e flexível projetada para gerenciar operações relacionadas a uma livraria virtual. Permitindo aos usuários acessar e manipular informações sobre livros, autores, categorias, etc, a API oferece uma experiência completa para todo o gerenciamento.
 
