@@ -1,12 +1,5 @@
 name: Pipeline
-on:
-  push:
-    paths:
-      - '**.py'
-  pull_request:
-    paths:
-      - '**.py'
-
+on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
