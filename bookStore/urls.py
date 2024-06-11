@@ -35,6 +35,11 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+admin.site.site_title = "BookStore Admin"
+admin.site.site_header = "BookStore Admin"
+admin.site.index_title = "BookStore Admin"
+admin.site.site_url = '/swagger'
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("books.urls")),
